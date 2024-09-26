@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel  # data validation
 from starlette import status
 from sqlalchemy.orm import Session                      
@@ -9,7 +9,7 @@ from ..model import Users
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
-
+from fastapi.templating import Jinja2Templates
 
 router = APIRouter(
     prefix='/auth',
@@ -29,9 +29,21 @@ ALGORITHM = "HS256"
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated="auto")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
 db_dependancy = Annotated[Session, Depends(get_db)]
+template = Jinja2Templates(directory="TodoApp/templates")
 
 
+### Pages ###
 
+@router.get('/login-page')
+def render_login_page(request:Request):
+    return template.TemplateResponse("login.html",{"request":request})
+
+@router.get('/register-page')
+def render_register_page(request:Request):
+    return template.TemplateResponse("register.html",{"request":request})
+
+
+### EndPoints ###
 class CreateRequestUser(BaseModel):
     username: str
     email: str
