@@ -60,7 +60,7 @@ async def render_todo_page(request:Request, db:db_dependancy):
         return redirect_to_login()
 
 @router.get('/add-todo-page')
-async def render_todo_page(request:Request, db:db_dependancy):
+async def render_todo_page(request:Request):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
         
@@ -71,6 +71,21 @@ async def render_todo_page(request:Request, db:db_dependancy):
     except:
         return redirect_to_login()
 
+
+@router.get('/edit-todo-page/{todo_id}')
+async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependancy):
+    try:
+        user = await get_current_user(request.cookies.get('access_token'))
+        
+        if user is None:
+            return redirect_to_login()
+        
+        todo = db.query(Todos).filter(Todos.id == todo_id).first()
+        
+        return templates.TemplateResponse('edit-todo.html', {"request": request, 'todo': todo, "user": user})
+    except:
+        return redirect_to_login()
+    
 ### Endpoints ###
 # GET ALL TODOS
 @router.get('/', status_code=status.HTTP_200_OK)
@@ -112,7 +127,7 @@ async def add_todo(user:user_dependancy, db:db_dependancy, todo_data:TodoRequest
 async def update_todo(user:user_dependancy, db:db_dependancy, todo_data:TodoRequest, todo_id:int=Path(gt=0)):
     if user is None:
         return HTTPException(status_code=401, detail='Authentication Failed')
-    
+    print('FLAG')
     todo_model = db.query(Todos).filter(Todos.id == todo_id).filter(Todos.owner_id == user.get('user_id')).first()
     
     if todo_model is None:
