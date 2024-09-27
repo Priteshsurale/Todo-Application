@@ -3,8 +3,8 @@ from starlette import status
 from typing import Annotated
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
-from ..model import Todos
-from ..database import SessionLocal
+from model import Todos
+from database import SessionLocal
 from .auth import get_current_user
 from fastapi.templating import Jinja2Templates
 from starlette.responses import RedirectResponse
@@ -35,7 +35,7 @@ class TodoRequest(BaseModel):
 # Depends: the mechanism where an object receives other objects that it depends on. The other objects are called dependencies.
 db_dependancy = Annotated[Session, Depends(get_db)] 
 user_dependancy = Annotated[dict, Depends(get_current_user)]
-templates = Jinja2Templates(directory="TodoApp/templates")
+templates = Jinja2Templates(directory="templates")
 
 
 def redirect_to_login():

@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 from starlette import status
 from typing import Annotated
 from sqlalchemy.orm import Session
-from ..model import Users
-from ..database import SessionLocal
+from model import Users
+from database import SessionLocal
 from .auth import get_current_user
 
 router = APIRouter(

@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel  # data validation
 from starlette import status
 from sqlalchemy.orm import Session                      
-from ..database import SessionLocal
-from ..model import Users
+from database import SessionLocal
+from model import Users
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
@@ -29,7 +29,7 @@ ALGORITHM = "HS256"
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated="auto")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
 db_dependancy = Annotated[Session, Depends(get_db)]
-template = Jinja2Templates(directory="TodoApp/templates")
+template = Jinja2Templates(directory="templates")
 
 
 ### Pages ###
