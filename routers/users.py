@@ -48,12 +48,12 @@ async def get_users(user: user_dependancy, db:db_dependancy):
 
 
 
-@router.put('/password', status_code=status.HTTP_204_NO_CONTENT)
-async def change_password(user:user_dependancy, db:db_dependancy, user_data:UserVerification):
-    if user is None:
+@router.put('/change_password', status_code=status.HTTP_204_NO_CONTENT)
+async def change_password(user_validation:user_dependancy, db:db_dependancy, user_data:UserVerification):
+    if user_validation is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    user_model = db.query(Users).filter(Users.id == user.get('user_id')).first()
+    user_model = db.query(Users).filter(Users.id == user_validation.get('user_id')).first()
     
     if not bcrypt.verify(user_data.password, user_model.hashed_password):
         raise HTTPException(status_code=401, detail='Old Password Dosen\'t Matched') 
