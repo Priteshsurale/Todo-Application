@@ -28,3 +28,11 @@ def test_class(default_student):
     assert default_student.major == 'ECE'
     assert default_student.years == 4
     
+
+
+
+def test_addition_function():
+    def add(x):
+        return x+x
+    
+    assert add(2) == 4
